@@ -106,7 +106,7 @@ The prototype is an academic proof of concept. Future development would require:
 - `.env.example`: Example environment variable configuration
 - `.gitignore`: Files excluded from version control
 
-The application also references structured condition documents and a definitions glossary, which are required for relevant functionality.
+The application uses structured JSON condition templates stored in the `documents/` folder. An optional `definitions.json` glossary can provide additional terminology explanations, but the application is designed to run without it.
 
 ## Running the Prototype
 
