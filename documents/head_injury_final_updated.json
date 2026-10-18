@@ -1,0 +1,341 @@
+{
+  "condition": "Head Injury / Concussion",
+  "description": "Any injury to the head caused by impact, fall, collision, or force. May result in concussion or other neurological symptoms.",
+
+  "keywords": [
+    "head injury",
+    "concussion",
+    "hit head",
+    "banged head",
+    "traumatic brain injury"
+  ],
+
+  "synonyms": [
+    "hit my head",
+    "my head hurts after fall",
+    "head bump",
+    "fell and hit head",
+    "head trauma",
+    "knocked my head",
+    "hit on the head"
+  ],
+
+  "category": "Neurological / Trauma",
+
+  "source": [
+    "https://myhealth.alberta.ca/health/pages/conditions.aspx?Hwid=head3",
+    "https://myhealth.alberta.ca/health/pages/conditions.aspx?Hwid=hdinj",
+    "https://myhealth.alberta.ca/Health/aftercareinformation/pages/conditions.aspx?hwid=abr7100"
+  ],
+
+  "triage_questions": [
+    {
+      "id": "q0_age",
+      "question": "How old are you?",
+      "type": "number",
+      "always_next": "q0_age_router"
+    },
+    {
+      "id": "q0_age_router",
+      "question": "(system) route by age",
+      "type": "system",
+      "route_under_16": "child_flow",
+      "route_16_or_older": "adult_flow"
+    }
+  ],
+
+  "child_flow": [
+    {
+      "id": "c1_mechanism",
+      "question": "How did the head injury happen?",
+      "type": "choice",
+      "options": ["fall","hit by object","collision","sports injury","not sure","other"],
+      "next_if_fall": "c2_fall_height",
+      "next_if_not sure": "c2_fall_height",
+      "next_if_hit by object": "c2_object",
+      "next_if_collision": "c2_collision",
+      "next_if_sports injury": "c2_sports",
+      "next_if_other": "c2_other"
+    },
+    {
+      "id": "c2_fall_height",
+      "question": "If it was a fall, how far did the child fall?",
+      "type": "choice",
+      "options": ["less than 1 meter","1–2 meters","more than 2 meters","not a fall"],
+      "always_next": "c3_helmet"
+    },
+    {
+      "id": "c2_object",
+      "question": "What object did the child hit their head on?",
+      "type": "text",
+      "always_next": "c3_helmet"
+    },
+    {
+      "id": "c2_collision",
+      "question": "What did the child collide with?",
+      "type": "text",
+      "always_next": "c3_helmet"
+    },
+    {
+      "id": "c2_sports",
+      "question": "During the sports injury, did the child have a direct hit to the head?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "c3_helmet"
+    },
+    {
+      "id": "c2_other",
+      "question": "Please describe how the injury happened.",
+      "type": "text",
+      "always_next": "c3_helmet"
+    },
+    {
+      "id": "c3_helmet",
+      "question": "Was the child wearing a helmet?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "c4_loss_consciousness"
+    },
+    {
+      "id": "c4_loss_consciousness",
+      "question": "Did the child lose consciousness?",
+      "type": "choice",
+      "options": ["yes", "no", "unsure"],
+      "always_next": "c5_memory_loss"
+    },
+    {
+      "id": "c5_memory_loss",
+      "question": "Are there any memory gaps before or after the injury?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "c6_vomiting"
+    },
+    {
+      "id": "c6_vomiting",
+      "question": "Has the child vomited?",
+      "type": "choice",
+      "options": ["no", "once", "multiple times"],
+      "always_next": "c7_headache"
+    },
+    {
+      "id": "c7_headache",
+      "question": "Does the child have a headache?",
+      "type": "choice",
+      "options": ["none", "mild", "moderate", "severe"],
+      "always_next": "c8_severity_symptoms"
+    },
+    {
+      "id": "c8_severity_symptoms",
+      "question": "Is the child dizzy, unsteady, or off balance?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "c9_vision"
+    },
+    {
+      "id": "c9_vision",
+      "question": "Does the child have blurry vision, double vision, or sensitivity to light?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "c10_behavior"
+    },
+    {
+      "id": "c10_behavior",
+      "question": "Is the child unusually sleepy, hard to wake, very irritable, or not acting like themselves?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "c11_neuro"
+    },
+    {
+      "id": "c11_neuro",
+      "question": "Is the child experiencing weakness, numbness, or trouble walking?",
+      "type": "choice",
+      "options": ["yes", "no"]
+    }
+  ],
+
+  "adult_flow": [
+     {
+      "id": "a_gender",
+      "question": "What is your biological sex?",
+      "type": "choice",
+      "options": ["M(Male)", "F(Female)", "intersex", "prefer not to say"],
+      "next_if_M(Male)": "a1_mechanism",
+      "next_if_intersex": "a1_mechanism",
+      "next_if_prefer_not_to_say": "a1_mechanism",
+      "next_if_F(Female)": "a_preg_check"
+    },
+    {
+      "id": "a_preg_check",
+      "question": "Is there any chance you are pregnant?",
+      "type": "choice",
+      "options": ["yes", "no", "not sure", "not applicable"],
+      "always_next": "a1_mechanism"
+    },
+    {
+      "id": "a1_mechanism",
+      "question": "How did the injury happen?",
+      "type": "choice",
+      "options": ["fall","hit by object","collision","sports injury","assault","not sure","other"],
+      "next_if_fall": "a2_fall_height",
+      "next_if_not sure": "a2_fall_height",
+      "next_if_hit by object": "a2_object",
+      "next_if_collision": "a2_collision",
+      "next_if_sports injury": "a2_sports",
+      "next_if_assault": "a2_assault",
+      "next_if_other": "a2_other"
+    },
+    {
+      "id": "a2_fall_height",
+      "question": "If it was a fall, how far did you fall?",
+      "type": "choice",
+      "options": ["less than 1 meter","1–2 meters","more than 2 meters","not a fall"],
+      "always_next": "a3_helmet"
+    },
+    {
+      "id": "a2_object",
+      "question": "What object did you hit your head on?",
+      "type": "text",
+      "always_next": "a3_helmet"
+    },
+    {
+      "id": "a2_collision",
+      "question": "What did you collide with?",
+      "type": "text",
+      "always_next": "a3_helmet"
+    },
+    {
+      "id": "a2_sports",
+      "question": "During the sports injury, did you have a direct hit to the head?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a3_helmet"
+    },
+    {
+      "id": "a2_assault",
+      "question": "During the assault, were you struck on the head, thrown to the ground, or both?",
+      "type": "choice",
+      "options": ["struck on the head", "thrown to the ground", "both"],
+      "always_next": "a3_helmet"
+    },
+    {
+      "id": "a2_other",
+      "question": "Please describe how the injury happened.",
+      "type": "text",
+      "always_next": "a3_helmet"
+    },
+    {
+      "id": "a3_helmet",
+      "question": "Were you wearing a helmet?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a4_loss_consciousness"
+    },
+    {
+      "id": "a4_loss_consciousness",
+      "question": "Did you lose consciousness?",
+      "type": "choice",
+      "options": ["yes", "no", "unsure"],
+      "always_next": "a5_memory_loss"
+    },
+    {
+      "id": "a5_memory_loss",
+      "question": "Do you have any memory loss around the event?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a6_headache_check"
+    },
+    {
+      "id": "a6_headache_check",
+      "question": "Do you have a headache?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "next_if_yes": "a7_headache_severity",
+      "next_if_no": "a8_vomiting"
+    },
+    {
+      "id": "a7_headache_severity",
+      "question": "How severe is your headache?",
+      "type": "choice",
+      "options": ["none","1–3 (mild)","4–6 (moderate)","7–10 (severe)"],
+      "always_next": "a8_vomiting"
+    },
+    {
+      "id": "a8_vomiting",
+      "question": "Have you vomited?",
+      "type": "choice",
+      "options": ["no", "once", "multiple times"],
+      "always_next": "a9_dizziness"
+    },
+    {
+      "id": "a9_dizziness",
+      "question": "Are you dizzy, lightheaded, or unsteady?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a10_vision"
+    },
+    {
+      "id": "a10_vision",
+      "question": "Do you have blurry vision, double vision, or sensitivity to light?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a11_sleepiness"
+    },
+    {
+      "id": "a11_sleepiness",
+      "question": "Are you unusually sleepy, confused, or having trouble staying awake?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a12_neuro"
+    },
+    {
+      "id": "a12_neuro",
+      "question": "Do you have weakness, numbness, trouble walking, or balance problems?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a13_blood_thinners"
+    },
+    {
+      "id": "a13_blood_thinners",
+      "question": "Are you taking blood thinners (warfarin, apixaban, clopidogrel, etc.)?",
+      "type": "choice",
+      "options": ["yes", "no"]
+    }
+  ],
+
+  "risk_factors": [
+    "Age under 5 or over 65 increases risk of complications",
+    "Fall from height greater than 1 meter (3 feet)",
+    "High-impact sports injury",
+    "Hit by a heavy or fast-moving object",
+    "Not wearing a helmet",
+    "Use of blood thinners (warfarin, apixaban, rivaroxaban, dabigatran, clopidogrel, high-dose aspirin)",
+    "History of previous concussion",
+    "History of brain or skull surgery",
+    "Alcohol or drug use at the time of injury",
+    "Symptoms worsening over hours after the injury",
+    "Persistent vomiting",
+    "Severe or worsening headache",
+    "High-energy trauma such as vehicle collision or major fall"
+  ],
+
+  "red_flags": [
+    "Loss of consciousness at any point",
+    "Memory loss around the event",
+    "Repeated vomiting",
+    "Seizures",
+    "Bleeding or clear fluid from the nose or ears",
+    "Severe or worsening headache",
+    "Confusion, agitation, or unusual behavior",
+    "Difficulty staying awake or excessive drowsiness",
+    "Weakness or numbness in arms or legs",
+    "Trouble walking or balance problems",
+    "Slurred speech",
+    "Vision changes such as double vision or unequal pupils",
+    "Neck pain after head trauma",
+    "Large scalp swelling, especially in children",
+    "Bruising behind ears or around eyes",
+    "Children refusing to eat, very irritable, or unusually lethargic"
+  ],
+
+  "safety_disclaimer": "This information is for general education only and does not replace a medical assessment, diagnosis, or treatment by a qualified health professional. If you are ever unsure, feel very unwell, or notice red-flag symptoms such as confusion, severe headache, seizures, or loss of consciousness, call your local emergency number or go to the nearest Emergency Department."
+}

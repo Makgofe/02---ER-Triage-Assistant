@@ -1,0 +1,282 @@
+{
+  "condition": "Shortness of Breath (Dyspnea)",
+  "description": "A sensation of difficulty breathing, not getting enough air, or breathing that feels harder or faster than normal.",
+
+  "keywords": [
+    "shortness of breath",
+    "difficulty breathing",
+    "dyspnea",
+    "hard to breathe",
+    "breathless",
+    "can't breathe",
+    "cant breathe",
+    "out of breath",
+    "struggling to breathe",
+    "trouble breathing"
+  ],
+
+  "synonyms": [
+    "shorness of breath",
+    "shortnes of breath",
+    "cant breath",
+    "cant brethe",
+    "dypsnea",
+    "I can't catch my breath",
+    "breathing feels heavy",
+    "I'm gasping",
+    "breathing is hard",
+    "my chest feels tight",
+    "I feel winded",
+    "wheezing",
+    "air hunger",
+    "breathing difficulty",
+    "rapid breathing"
+  ],
+
+  "category": "Respiratory / Cardiovascular / Emergency",
+
+  "source": [
+    "https://www.nhs.uk/symptoms/shortness-of-breath/"
+  ],
+
+  "triage_questions": [
+    {
+      "id": "q0_age",
+      "question": "How old are you?",
+      "type": "number",
+      "always_next": "q0_age_router"
+    },
+    {
+      "id": "q0_age_router",
+      "question": "(system) route by age",
+      "type": "system",
+      "route_under_16": "child_flow",
+      "route_16_or_older": "adult_flow"
+    }
+  ],
+
+  "child_flow": [
+    {
+      "id": "c_asthma",
+      "question": "Has your child been diagnosed with asthma or reactive airway disease?",
+      "type": "choice",
+      "options": ["yes", "no", "not sure"],
+      "always_next": "c_recent_viral"
+    },
+    {
+      "id": "c_recent_viral",
+      "question": "Has your child recently had a cold, flu, RSV, or pneumonia?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "c_allergy"
+    },
+    {
+      "id": "c_allergy",
+      "question": "Was your child recently exposed to allergens, smoke, or anything that triggers wheezing?",
+      "type": "choice",
+      "options": ["yes", "no", "not sure"],
+      "always_next": "c_sickle"
+    },
+    {
+      "id": "c_sickle",
+      "question": "Does your child have sickle cell disease?",
+      "type": "choice",
+      "options": ["yes", "no", "not sure"],
+      "always_next": "c_breathing"
+    },
+    {
+      "id": "c_breathing",
+      "question": "Is your child struggling to breathe, wheezing, or unable to speak full sentences?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "c_onset"
+    },
+    {
+      "id": "c_onset",
+      "question": "When did the breathing difficulty start?",
+      "type": "text"
+    }
+  ],
+
+
+  "adult_flow": [
+    {
+      "id": "a_gender",
+      "question": "What is your biological sex?",
+      "type": "choice",
+      "options": ["M(Male)", "F(Female)", "intersex", "prefer not to say"],
+      "next_if_M(Male)": "p_onset",
+      "next_if_intersex": "p_onset",
+      "next_if_prefer_not_to_say": "p_onset",
+      "next_if_F(Female)": "a_preg_status"
+    },
+    {
+      "id": "a_preg_status",
+      "question": "Are you pregnant or have you recently given birth?",
+      "type": "choice",
+      "options": ["yes", "no", "not sure"],
+      "always_next": "p_onset"
+    },
+     {
+      "id": "p_onset",
+      "question": "When did the shortness of breath start?",
+      "type": "text",
+      "always_next": "p_chestpain"
+    },
+    {
+      "id": "p_chestpain",
+      "question": "Are you also experiencing chest pain or pressure?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_sudden"
+    },
+    {
+      "id": "a_sudden",
+      "question": "Did the breathing difficulty come on suddenly?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_main_symptom"
+    },
+    {
+      "id": "a_main_symptom",
+      "question": "Describe your main breathing difficulty (tight chest, fast breathing, wheezing, gasping).",
+      "type": "text",
+      "always_next": "a_course"
+    },
+    {
+      "id": "a_course",
+      "question": "Has your breathing been getting better, worse, or staying the same?",
+      "type": "choice",
+      "options": ["better", "worse", "same"],
+      "always_next": "a_severity"
+    },
+    {
+      "id": "a_severity",
+      "question": "Are you short of breath while resting, or only when walking or climbing stairs?",
+      "type": "choice",
+      "options": ["at rest", "with light activity", "with exertion only"],
+      "always_next": "a_speak"
+    },
+    {
+      "id": "a_speak",
+      "question": "Can you speak in full sentences without needing to stop for breath?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_dizziness"
+    },
+    {
+      "id": "a_dizziness",
+      "question": "Are you feeling faint, lightheaded, or confused?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_blue"
+    },
+    {
+      "id": "a_blue",
+      "question": "Have you noticed your lips or fingertips turning blue or grey?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_cough"
+    },
+    {
+      "id": "a_cough",
+      "question": "Do you have a cough?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "next_if_yes": "a_cough_mucus",
+      "next_if_no": "a_wheeze"
+    },
+    {
+      "id": "a_cough_mucus",
+      "question": "If coughing, what colour is the mucus?",
+      "type": "choice",
+      "options": ["clear", "white", "yellow", "green", "bloody", "not sure"],
+      "always_next": "a_wheeze"
+    },
+    {
+      "id": "a_wheeze",
+      "question": "Are you wheezing or making a whistling sound when breathing?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_history"
+    },
+    {
+      "id": "a_history",
+      "question": "Do you have a history of asthma, COPD, heart disease, anemia, or blood clots?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_surgery"
+    },
+    {
+      "id": "a_surgery",
+      "question": "Have you recently had surgery, long travel, or bed rest for several days?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_hormone"
+    },
+    {
+      "id": "a_hormone",
+      "question": "Are you currently on hormone therapy (birth control pills, hormone replacement)?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_dvt_history"
+    },
+    {
+      "id": "a_dvt_history",
+      "question": "Do you have a history of blood clots or deep vein thrombosis (DVT)?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_medications"
+    },
+    {
+      "id": "a_medications",
+      "question": "Do you take inhalers, blood thinners, hormone therapy, or any regular medications?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_allergy"
+    },
+    {
+      "id": "a_allergy",
+      "question": "Did this begin after exposure to something you’re allergic to (food, medication, insect sting)?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_previous"
+    },
+    {
+      "id": "a_previous",
+      "question": "Has this happened before? If yes, what was the cause?",
+      "type": "text"
+    }
+  ],
+
+  "risk_factors": [
+    "Asthma or COPD",
+    "Heart disease",
+    "Respiratory infection",
+    "Smoking",
+    "Obesity",
+    "Blood clot risk",
+    "Anemia",
+    "Older age",
+    "Chest injury",
+    "Allergy exposure"
+  ],
+
+  "red_flags": [
+  "Shortness of breath that is getting worse or not improving with rest",
+  "Shortness of breath at rest or when speaking a few words",
+  "Inability to speak full sentences without stopping for breath",
+  "Blue or grey color of the lips, face, or fingertips",
+  "Chest pain or pressure together with shortness of breath",
+  "Feeling of suffocating or air hunger",
+  "Severe wheezing or very noisy breathing",
+  "Breathing that is much faster or more shallow than usual",
+  "New confusion, extreme fatigue, or feeling like you might faint",
+  "Very fast, pounding, or irregular heartbeat with breathlessness",
+  "Swelling or pain in one leg together with shortness of breath",
+  "Coughing up blood",
+  "Shortness of breath with high fever, shaking chills, or feeling very unwell"
+],
+
+  "safety_disclaimer": "This information is for general education only and does not replace a medical assessment."
+}

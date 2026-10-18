@@ -1,0 +1,416 @@
+{
+  "condition": "Chest Pain / Chest Problems",
+  "description": "Pain, pressure, tightness, or discomfort in any part of the chest.",
+
+  "keywords": [
+    "chest pain",
+    "chest pressure",
+    "chest tightness",
+    "rib pain",
+    "shortness of breath",
+    "coughing blood",
+    "chest discomfort",
+    "chest injury"
+  ],
+
+  "synonyms": [
+    "chst pain",
+    "ches pain",
+    "chest pn",
+    "chest pian",
+    "my chest hurts",
+    "tight chest",
+    "pressure in chest",
+    "hard to breathe",
+    "rib pain",
+    "chest discomfort",
+    "coughing blood",
+    "chest injury"
+  ],
+
+  "category": "Cardiac / Respiratory / Musculoskeletal",
+
+  "source": [
+    "https://myhealth.alberta.ca/health/pages/conditions.aspx?Hwid=cstpn",
+    "https://www.nhs.uk/symptoms/chest-pain/"
+  ],
+
+  "triage_questions": [
+    {
+      "id": "q0_age",
+      "question": "How old are you?",
+      "type": "number",
+      "always_next": "q0_age_router"
+    },
+    {
+      "id": "q0_age_router",
+      "question": "(system) age routing",
+      "type": "system",
+      "route_under_16": "child_flow",
+      "route_16_or_older": "adult_flow"
+    }
+  ],
+
+  "child_flow": [
+    {
+      "id": "c_asthma",
+      "question": "Has your child been diagnosed with asthma or reactive airway disease?",
+      "type": "choice",
+      "options": ["yes", "no", "not sure"],
+      "always_next": "c_recent_viral"
+    },
+    {
+      "id": "c_recent_viral",
+      "question": "Has your child recently had a viral illness such as a cold, flu, RSV, or COVID-19?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "c_chest_wall"
+    },
+    {
+      "id": "c_chest_wall",
+      "question": "Did the chest pain start after coughing, running, or physical activity?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "c_congenital"
+    },
+    {
+      "id": "c_congenital",
+      "question": "Does your child have any known heart conditions from birth (congenital heart disease)?",
+      "type": "choice",
+      "options": ["yes", "no", "not sure"],
+      "always_next": "c_sickle"
+    },
+    {
+      "id": "c_sickle",
+      "question": "Does your child have sickle cell disease?",
+      "type": "choice",
+      "options": ["yes", "no", "not sure"],
+      "always_next": "c_allergy"
+    },
+    {
+      "id": "c_allergy",
+      "question": "Was your child exposed to allergens, smoke, or something that could trigger wheezing?",
+      "type": "choice",
+      "options": ["yes", "no", "not sure"],
+      "always_next": "c_breathing"
+    },
+    {
+      "id": "c_breathing",
+      "question": "Is your child having trouble breathing, wheezing, or working hard to breathe?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "c_symptom"
+    },
+    {
+      "id": "c_symptom",
+      "question": "Describe your child's main chest symptom (pain, pressure, cough, injury):",
+      "type": "text"
+    }
+  ],
+
+
+  "adult_flow": [
+    {
+      "id": "a_gender",
+      "question": "What is your biological sex?",
+      "type": "choice",
+      "options": ["M(Male)", "F(Female)", "intersex", "prefer not to say"],
+      "next_if_M(Male)": "a_over60",
+      "next_if_intersex": "a_over60",
+      "next_if_prefer_not_to_say": "a_over60",
+      "next_if_F(Female)": "a_female_symptoms"
+    },
+    {
+      "id": "a_female_symptoms",
+      "question": "As a female, are you experiencing unusual nausea, extreme fatigue, or back/jaw pain?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_preg_check"
+    },
+    {
+      "id": "a_preg_check",
+      "question": "Is there any chance you are pregnant?",
+      "type": "choice",
+      "options": ["yes", "no", "not sure", "not applicable"],
+      "next_if_yes": "p_shortbreath",
+      "next_if_not_sure": "p_shortbreath",
+      "next_if_no": "a_over60",
+      "next_if_not_applicable": "a_over60"
+    },
+    {
+      "id": "p_shortbreath",
+      "question": "Do you have chest pain with shortness of breath, leg swelling, or a fast heartbeat?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_over60"
+    },
+    {
+      "id": "a_over60",
+      "question": "Are you older than 60?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "next_if_yes": "a_over60_severe",
+      "next_if_no": "a_med_history"
+    },
+    {
+      "id": "a_over60_severe",
+      "question": "If over 60, is your chest pain sudden or unusually severe?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_med_history"
+    },
+    {
+      "id": "a_med_history",
+      "question": "Are you currently taking any regular medications?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "next_if_yes": "a_med_name",
+      "next_if_no": "a_main_symptom"
+    },
+    {
+      "id": "a_med_name",
+      "question": "What medications are you taking?",
+      "type": "text",
+      "always_next": "a_blood_thinners"
+    },
+    {
+      "id": "a_blood_thinners",
+      "question": "Are you taking any blood thinners?",
+      "type": "choice",
+      "options": ["yes", "no", "not sure"],
+      "always_next": "a_smoke"
+    },
+    {
+      "id": "a_smoke",
+      "question": "Do you smoke or have you smoked recently?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_main_symptom"
+    },
+    {
+      "id": "a_main_symptom",
+      "question": "What is your main symptom? (Pain, pressure, tightness, shortness of breath, cough, injury)",
+      "type": "text",
+      "always_next": "a_activity"
+    },
+    {
+      "id": "a_activity",
+      "question": "Did the symptoms start during exercise or physical activity?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "next_if_yes": "a_activity2",
+      "next_if_no": "a_past_symptoms"
+    },
+    {
+      "id": "a_activity2",
+      "question": "During the activity, did you feel palpitations, dizziness, or shortness of breath?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_past_symptoms"
+    },
+    {
+      "id": "a_past_symptoms",
+      "question": "Have you had similar symptoms before?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_start"
+    },
+    {
+      "id": "a_start",
+      "question": "How long ago did the symptoms start?",
+      "type": "text",
+      "always_next": "a_pain_scale"
+    },
+    {
+      "id": "a_pain_scale",
+      "question": "How would you rate the pain (0-10)?",
+      "type": "choice",
+      "options": ["0","1","2","3","4","5","6","7","8","9","10"],
+      "always_next": "a_radiation"
+    },
+    {
+      "id": "a_radiation",
+      "question": "Does the pain spread to your arm, jaw, neck, or back?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_autonomic"
+    },
+    {
+      "id": "a_autonomic",
+      "question": "Are you sweating, nauseous, or feeling faint?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_heart_history"
+    },
+    {
+      "id": "a_heart_history",
+      "question": "Do you have a history of heart disease or angina?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "next_if_yes": "a_angina_change",
+      "next_if_no": "a_short_breath"
+    },
+    {
+      "id": "a_angina_change",
+      "question": "Is this pain different or worse than your usual angina?",
+      "type": "choice",
+      "options": ["yes", "no", "not applicable"],
+      "always_next": "a_short_breath"
+    },
+    {
+      "id": "a_short_breath",
+      "question": "Do you feel short of breath?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "next_if_yes": "a_short_breath2",
+      "next_if_no": "a_cough"
+    },
+    {
+      "id": "a_short_breath2",
+      "question": "How would you describe the shortness of breath?",
+      "type": "choice",
+      "options": ["mild", "moderate", "severe"],
+      "always_next": "a_cough"
+    },
+    {
+      "id": "a_cough",
+      "question": "Are you coughing?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "next_if_yes": "a_cough2",
+      "next_if_no": "a_injury"
+    },
+    {
+      "id": "a_cough2",
+      "question": "How long have you been coughing (if at all)?",
+      "type": "text",
+      "always_next": "a_phlegm"
+    },
+    {
+      "id": "a_phlegm",
+      "question": "Is your cough producing mucus? If yes, what color?",
+      "type": "choice",
+      "options": ["no cough", "clear", "white", "yellow", "green", "bloody"],
+      "always_next": "a_blood"
+    },
+    {
+      "id": "a_blood",
+      "question": "Are you coughing up blood?",
+      "type": "choice",
+      "options": ["no", "small streaks", "moderate amount", "large amount"],
+      "always_next": "a_injury"
+    },
+    {
+      "id": "a_injury",
+      "question": "Did you recently injure your chest?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "next_if_yes": "a_injury2",
+      "next_if_no": "a_leg"
+    },
+    {
+      "id": "a_injury2",
+      "question": "Can you pinpoint the pain by touching it?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "next_if_yes": "a_injury3",
+      "next_if_no": "a_injury4"
+    },
+    {
+      "id": "a_injury3",
+      "question": "If so, where does it hurt?",
+      "type": "text",
+      "always_next": "a_injury4"
+    },
+    {
+      "id": "a_injury4",
+      "question": "Does it hurt more when taking a deep breath?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_leg"
+    },
+    {
+      "id": "a_leg",
+      "question": "Do you have pain or swelling in one leg?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_travel"
+    },
+    {
+      "id": "a_travel",
+      "question": "Have you recently traveled long distances or been immobile for many hours?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_fever"
+    },
+    {
+      "id": "a_fever",
+      "question": "Do you have fever or chills?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_rash"
+    },
+    {
+      "id": "a_rash",
+      "question": "Do you have a rash on one side of your chest?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "next_if_yes": "rash_details",
+      "next_if_no": "a_chronic"
+    },
+    {
+      "id": "rash_details",
+      "question": "Is the rash painful, itchy, or blistering?",
+      "type": "choice",
+      "options": ["painful", "itchy", "blistering", "none of these"],
+      "always_next": "a_chronic"
+    },
+    {
+      "id": "a_chronic",
+      "question": "Do you have any chronic conditions (heart disease, diabetes, asthma, COPD, etc.)?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_immuno"
+    },
+    {
+      "id": "a_immuno",
+      "question": "Are you taking steroids or undergoing chemotherapy?",
+      "type": "choice",
+      "options": ["yes", "no"]
+    }
+  ],
+
+  "risk_factors": [
+    "History of heart disease (angina, heart attack, arrhythmia)",
+    "High blood pressure, high cholesterol, diabetes",
+    "Smoker or recent heavy smoking history",
+    "Obesity or sedentary lifestyle",
+    "Family history of heart conditions",
+    "Use of blood thinners (e.g., warfarin, apixaban)",
+    "Recent long travel or immobility (clot risk)",
+    "Recent surgery or hospitalization",
+    "Lung conditions (asthma, COPD, pneumonia history)",
+    "Recent chest trauma or injury",
+    "Immunosuppression (HIV, steroids, chemotherapy)"
+  ],
+
+  "red_flags": [
+    "Chest pain lasting more than 10 minutes and not improving",
+    "Chest pain with moderate or severe shortness of breath",
+    "Pain spreading to the arm, neck, jaw, or back",
+    "Coughing up blood",
+    "Chest pain with  autonomic symptoms (sweating, nausea, vomiting, or dizziness)",
+    "Loss of consciousness or fainting",
+    "Irregular, very fast, or abnormal heartbeat",
+    "New confusion, extreme weakness, or signs of shock",
+    "Severe trauma to the chest (such as car crash or major impact)",
+    "Chest pain worse with breathing plus shortness of breath and leg swelling",
+    "Sudden severe tearing or ripping pain in the chest or back",
+    "Severe chest tightness not related to movement",
+    "Chest pain that is getting worse over several hours",
+    "Severe shortness of breath not caused by pain",
+    "Cold, clammy, or sweaty skin"
+  ],
+
+  "safety_disclaimer": "This information is for general education only and does not replace a medical assessment."
+}

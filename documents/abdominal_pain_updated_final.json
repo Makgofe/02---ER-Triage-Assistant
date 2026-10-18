@@ -1,0 +1,374 @@
+{
+  "condition": "Abdominal Pain / Stomach Pain",
+  "description": "Pain, discomfort, cramping, or aching anywhere in the abdomen.",
+
+  "keywords": [
+      "stomach pain",
+      "stomach ache",
+      "abdominal pain",
+      "tummy ache"
+  ],
+
+  "synonyms": [
+      "belly pain",
+      "belly hurts",
+      "tummy hurts",
+      "my tummy hurts",
+      "stomach hurting",
+      "belly ache",
+      "my stomach hurts",
+      "stomack pain",
+      "stomac pain",
+      "stomach hurts badly"
+  ],
+
+  "category": "Gastrointestinal",
+
+  "source": [
+      "https://www.nhs.uk/symptoms/stomach-ache/",
+      "https://myhealth.alberta.ca/Health/pages/conditions.aspx?hwid=abpn10",
+      "https://myhealth.alberta.ca/Health/pages/conditions.aspx?hwid=abdpn"
+  ],
+
+  "triage_questions": [
+    {
+      "id": "q0_age",
+      "question": "How old are you?",
+      "type": "number",
+      "always_next": "q0_age_router"
+    },
+    {
+      "id": "q0_age_router",
+      "question": "(system) route by age",
+      "type": "system",
+      "route_under_16": "child_flow",
+      "route_16_or_older": "adult_flow"
+    }
+  ],
+
+  "child_flow": [
+    {
+      "id": "c1_injury",
+      "question": "Has your child had any injury to the belly area (such as a fall or being hit)?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "c2_severity"
+    },
+    {
+      "id": "c2_severity",
+      "question": "How severe is the child's belly pain?",
+      "type": "choice",
+      "options": ["1–3 (mild)", "4–6 (moderate)", "7–10 (severe)"],
+      "always_next": "c3_fever"
+    },
+    {
+      "id": "c3_fever",
+      "question": "Does the child have a fever?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "c4_vomiting"
+    },
+    {
+      "id": "c4_vomiting",
+      "question": "Has the child been vomiting?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "next_if_yes": "c5_vomit_blood",
+      "next_if_no": "c6_diarrhea"
+    },
+    {
+      "id": "c5_vomit_blood",
+      "question": "Has the child vomited blood or something that looks like coffee grounds?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "c6_diarrhea"
+    },
+    {
+      "id": "c6_diarrhea",
+      "question": "Does the child have diarrhea?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "next_if_yes": "c7_stool_blood",
+      "next_if_no": "c8_urination"
+    },
+    {
+      "id": "c7_stool_blood",
+      "question": "Has the child had bloody or black stools?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "c8_urination"
+    },
+    {
+      "id": "c8_urination",
+      "question": "Is the child able to pee normally?",
+      "type": "choice",
+      "options": ["yes", "no", "reduced"],
+      "always_next": "c9_behavior"
+    },
+    {
+      "id": "c9_behavior",
+      "question": "Is the child very sleepy, hard to wake, or unusually fussy?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "c10_duration"
+    },
+    {
+      "id": "c10_duration",
+      "question": "How long has the child had belly pain?",
+      "type": "choice",
+      "options": ["Less than 4 hours", "4–24 hours", "More than 1 day"]
+    }
+  ],
+
+  "adult_flow": [
+    {
+      "id": "a_gender",
+      "question": "What is your sex assigned at birth?",
+      "type": "choice",
+      "options": ["M(Male)", "F(Female)", "intersex", "prefer not to say"],
+      "next_if_M(Male)": "a1_injury",
+      "next_if_intersex": "a1_injury",
+      "next_if_prefer_not_to_say": "a1_injury",
+      "next_if_F(Female)": "a_female_symptoms"
+    },
+    {
+      "id": "a_female_symptoms",
+      "question": "Are you experiencing unusual nausea, extreme fatigue, or back/jaw pain?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_preg_check"
+    },
+    {
+      "id": "a_preg_check",
+      "question": "Is there any chance you are pregnant or have you given birth in the past 3 months??",
+      "type": "choice",
+      "options": ["yes", "no", "not sure", "not applicable"],
+      "next_if_yes": "p1_injury",
+      "next_if_not_sure": "p1_injury",
+      "next_if_no": "a1_injury",
+      "next_if_not_applicable": "a1_injury"
+    },
+    {
+      "id": "p1_injury",
+      "question": "Have you had a recent injury to your abdomen (fall, blow, or impact)?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "p2_bleeding"
+    },
+    {
+      "id": "p2_bleeding",
+      "question": "Are you experiencing any vaginal bleeding?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "p3_leaking"
+    },
+    {
+      "id": "p3_leaking",
+      "question": "Have you noticed any fluid leaking from the vagina?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "p4_fetal_movement"
+    },
+    {
+      "id": "p4_fetal_movement",
+      "question": "Have you noticed decreased fetal movement?",
+      "type": "choice",
+      "options": ["yes", "no", "not applicable"],
+      "always_next": "a_sudden_pain"
+    },
+    {
+      "id": "a1_injury",
+      "question": "Have you had a recent injury to your abdomen (such as a fall, blow, or impact)?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a2_recent_surgery"
+    },
+    {
+      "id": "a2_recent_surgery",
+      "question": "Have you had belly, pelvic, or chest surgery in the last 2 weeks?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_sudden_pain"
+    },
+    {
+      "id": "a_sudden_pain",
+      "question": "Did the pain start suddenly (within minutes/hours), or gradually over days?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a3_severity"
+    },
+    {
+      "id": "a3_severity",
+      "question": "How severe is your abdominal pain?",
+      "type": "choice",
+      "options": ["1–3 (mild)", "4–6 (moderate)", "7–10 (severe)"],
+      "always_next": "a4_location"
+    },
+    {
+      "id": "a4_location",
+      "question": "Where is the pain located?",
+      "type": "choice",
+      "options": ["upper abdomen", "lower abdomen", "right side", "left side", "all over"],
+      "always_next": "a5_duration"
+    },
+    {
+      "id": "a5_duration",
+      "question": "How long have you had the abdominal pain?",
+      "type": "choice",
+      "options": ["<4 hours", "4–24 hours", "1–2 days", "3–7 days", ">1 week"],
+      "always_next": "a6_change"
+    },
+    {
+      "id": "a6_change",
+      "question": "Has the pain been getting better, worse, or staying the same?",
+      "type": "choice",
+      "options": ["better", "worse", "same"],
+      "always_next": "a_med_history"
+    },
+    {
+      "id": "a_med_history",
+      "question": "Are you currently taking any regular medications?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a7_bloating"
+    },
+    {
+      "id": "a7_bloating",
+      "question": "Are you experiencing bloating or a swollen belly?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a8_urination"
+    },
+    {
+      "id": "a8_urination",
+      "question": "Are you having trouble urinating or does it burn when you pee?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a9_fever"
+    },
+    {
+      "id": "a9_fever",
+      "question": "Do you have a fever?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a10_vomiting"
+    },
+    {
+      "id": "a10_vomiting",
+      "question": "Are you vomiting?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "next_if_yes": "a11_vomit_blood",
+      "next_if_no": "a12_black_stool1"
+    },
+    {
+      "id": "a11_vomit_blood",
+      "question": "Have you vomited blood or coffee-ground material?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a12_black_stool1"
+    },
+    {
+      "id": "a12_black_stool1",
+      "question": "Do you have diarrhea?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "next_if_yes": "a12_black_stool2",
+      "next_if_no": "a15_constipation"
+    },
+    {
+      "id": "a12_black_stool2",
+      "question": "Have you had black or bloody stools?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a13_weight_loss"
+    },
+    {
+      "id": "a15_constipation",
+      "question": "Are you having difficulty passing stool or gas, or have you been constipated (or unable to pass anything)?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a13_weight_loss"
+    },
+    {
+      "id": "a13_weight_loss",
+      "question": "Have you lost weight unexpectedly recently or had a change in appetite recently??",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a14_immune"
+    },
+    {
+      "id": "a14_immune",
+      "question": "Do you have a condition that weakens your immune system?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_chronic_illness"
+    },
+    {
+      "id": "a_chronic_illness",
+      "question": "Do you have any chronic illnesses (e.g. diabetes, liver disease, kidney disease)?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_blood_thinners"
+    },
+    {
+      "id": "a_blood_thinners",
+      "question": "Are you taking any blood thinners?",
+      "type": "choice",
+      "options": ["yes", "no", "not sure"],
+      "always_next": "a_smoke"
+    },
+    {
+      "id": "a_smoke",
+      "question": "Do you smoke or have you smoked recently?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_main_symptom"
+    }
+  ],
+
+  "risk_factors": [
+    "Eating large or rich meals",
+    "Gas buildup or swallowing excess air",
+    "Low fiber intake",
+    "Recent intake of contaminated food",
+    "Contaminated food",
+    "Viral exposure (stomach bugs, flu, RSV, COVID-19)",
+    "Menstruation",
+    "History of IBS or digestive disorders",
+    "History of gallstones or kidney stones",
+    "High alcohol intake (risk for pancreatitis)",
+    "Regular use of NSAIDs (ibuprofen, naproxen)",
+    "History of stomach or duodenal ulcers",
+    "Chronic constipation",
+    "Recent antibiotic use (risk for C. difficile infection)",
+    "Recent international travel",
+    "History of hernias",
+    "Family history of gastrointestinal diseases"
+  ],
+
+  "red_flags": [
+    "Sudden, severe stomach pain",
+    "Pain that worsens when touching the stomach",
+    "Hard, rigid abdomen",
+    "Severe abdominal swelling with pain",
+    "Pain that spreads to the shoulder, chest, or back",
+    "Vomiting blood",
+    "Persistent vomiting",
+    "Green (bilious) vomiting",
+    "Black, tar-like stools",
+    "Blood in stool",
+    "Inability to pee",
+    "Very little urine output",
+    "Inability to pass stool or gas",
+    "Difficulty breathing",
+    "Chest pain with abdominal pain",
+    "Feeling faint or dizzy",
+    "Abdominal pain after major trauma",
+    "Vomiting with diabetes",
+    "Testicle pain with abdominal pain",
+    "Loss of consciousness"
+  ],
+
+  "safety_disclaimer": "This information is for general education only and does not replace a medical assessment."
+}

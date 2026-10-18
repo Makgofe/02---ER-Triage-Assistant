@@ -1,0 +1,341 @@
+{
+  "condition": "High Temperature (Fever)",
+  "description": "A high temperature (fever) is usually a sign that the body is fighting an infection.",
+
+  "keywords": [
+    "fever",
+    "high temperature",
+    "temperature 38",
+    "temperature 39",
+    "38c",
+    "39c",
+    "feel hot and cold",
+    "feeling hot and cold",
+    "hot and shivery",
+    "shivers",
+    "shivery",
+    "chills",
+    "chills and sweats",
+    "sweating a lot",
+    "sweats",
+    "hot back",
+    "hot chest",
+    "skin feels hot",
+    "flulike",
+    "flu like",
+    "flu-like fever",
+    "baby feels hot",
+    "child feels hot",
+    "hot baby",
+    "hot child",
+    "high temp"
+  ],
+
+  "synonyms": [
+    "feveer",
+    "fevar",
+    "temprature",
+    "fevr",
+    "i feel hot and cold",
+    "i'm burning up",
+    "i feel shivery",
+    "i feel feverish",
+    "hot flashes",
+    "i feel sweaty and cold",
+    "rigors",
+    "shivering",
+    "hot skin",
+    "flushes"
+  ],
+
+  "category": "Infection / General Symptoms",
+
+  "source": [
+    "https://www.nhs.uk/symptoms/fever-in-adults/",
+    "https://www.nhs.uk/symptoms/fever-in-children/"
+  ],
+
+  "triage_questions": [
+    {
+      "id": "q0_age",
+      "question": "How old are you?",
+      "type": "number",
+      "always_next": "q0_age_router"
+    },
+    {
+      "id": "q0_age_router",
+      "question": "(system) route by age",
+      "type": "system",
+      "route_under_16": "child_flow",
+      "route_16_or_older": "adult_flow"
+    }
+  ],
+
+
+  "child_flow": [
+    { "id": "c_temp", 
+      "question": "What is the child's temperature?", 
+      "type": "text", 
+      "always_next": "c_glass" 
+    },
+    {
+      "id": "c_glass",
+      "question": "Does the child have a rash that does not fade when you press a glass against it?",
+      "type": "choice",
+      "options": ["yes", "no", "not sure"],
+      "always_next": "c_neck"
+    },
+    {
+      "id": "c_neck",
+      "question": "Does the child have a stiff neck, dislike of light, or severe headache?",
+      "type": "choice",
+      "options": ["yes", "no", "not sure"],
+      "always_next": "c_responsive"
+    },
+    {
+      "id": "c_responsive",
+      "question": "Is the child very drowsy, difficult to wake, or not responding normally?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "c_agitated"
+    },
+    {
+      "id": "c_agitated",
+      "question": "Is the child extremely agitated, cannot be comforted, or very confused?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "c_breathing"
+    },
+    {
+      "id": "c_breathing",
+      "question": "Is the child having breathing problems such as breathing very fast, working hard to breathe, or grunting?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "c_color"
+    },
+    {
+      "id": "c_color",
+      "question": "Does the child have unusually cold hands/feet or skin that looks blue, grey, pale or blotchy?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "c_dehydration"
+    },
+    {
+      "id": "c_dehydration",
+      "question": "Are there signs of dehydration (very few wet nappies, dry mouth, sunken eyes)?",
+      "type": "choice",
+      "options": ["yes", "no", "not sure"],
+      "always_next": "c_eating"
+    },
+    {
+      "id": "c_eating",
+      "question": "Is the child refusing to eat or drink, or far less active than usual?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "c_seizure"
+    },
+    {
+      "id": "c_seizure",
+      "question": "Has the child had a seizure or fit (shaking that does not stop)?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "c_duration"
+    },
+    {
+      "id": "c_duration",
+      "question": "How many days has the fever lasted?",
+      "type": "text",
+      "always_next": "c_previous"
+    },
+    {
+      "id": "c_previous",
+      "question": "Has the child had similar fevers before?",
+      "type": "choice",
+      "options": ["yes", "no"]
+    }
+  ],
+
+  "adult_flow": [
+    {
+      "id": "q_gender",
+      "question": "What is your sex assigned at birth?",
+      "type": "choice",
+      "options": ["M(male)", "F(female)", "intersex", "prefer not to say"],
+      "next_if_M(male)": "a_temp",
+      "next_if_intersex": "a_temp",
+      "next_if_prefer_not_to_say": "a_temp",
+      "next_if_F(female)": "a_female_symptoms"
+    },
+    {
+      "id": "a_female_symptoms",
+      "question": "Are you experiencing unusual nausea, extreme fatigue, or back/jaw pain?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "q_adult_pregnancy"
+    },
+    {
+      "id": "q_adult_pregnancy",
+      "question": "Are you pregnant?",
+      "type": "choice",
+      "options": ["yes", "no", "not sure"],
+      "next_if_yes": "p_fever_uti",
+      "next_if_no": "a_temp",
+      "next_if_not_sure": "p_fever_uti"
+    },
+    {
+      "id": "p_fever_uti",
+      "question": "Are you having pain when you pee, or pain in your lower back (kidney area)?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_temp"
+    },
+    { "id": "a_temp", 
+      "question": "What is your temperature reading?", 
+      "type": "text", 
+      "always_next": "a_duration" 
+    },
+    {
+      "id": "a_duration",
+      "question": "How many days have you had the fever?",
+      "type": "text",
+      "always_next": "a_persist"
+    },
+    {
+      "id": "a_persist",
+      "question": "Is your fever staying the same or getting worse even after rest or medicine?",
+      "type": "choice",
+      "options": ["getting worse", "staying the same", "getting better", "not sure"],
+      "always_next": "a_breathing"
+    },
+    {
+      "id": "a_breathing",
+      "question": "Are you having difficulty breathing or breathing very fast?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_chest"
+    },
+    {
+      "id": "a_chest",
+      "question": "Are you experiencing chest pain or pressure?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_confusion"
+    },
+    {
+      "id": "a_confusion",
+      "question": "Are you confused, disoriented, or unusually drowsy?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_neck_stiff"
+    },
+    {
+      "id": "a_neck_stiff",
+      "question": "Do you have a stiff neck or pain when bending your neck forward?",
+      "type": "choice",
+      "options": ["yes", "no", "not sure"],
+      "always_next": "a_shivering"
+    },
+    {
+      "id": "a_shivering",
+      "question": "Are you shivering uncontrollably or having chills?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_rash"
+    },
+    {
+      "id": "a_rash",
+      "question": "Do you have a rash that does not fade when pressed with a glass?",
+      "type": "choice",
+      "options": ["yes", "no", "not sure"],
+      "always_next": "a_vomit"
+    },
+    {
+      "id": "a_vomit",
+      "question": "Are you vomiting repeatedly or unable to keep fluids down?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_dehydration"
+    },
+    {
+      "id": "a_dehydration",
+      "question": "Do you have signs of dehydration (very little urine, very dark urine, dizziness)?",
+      "type": "choice",
+      "options": ["yes", "no", "not sure"],
+      "always_next": "a_seizure"
+    },
+    {
+      "id": "a_seizure",
+      "question": "Have you had a seizure at any point?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_color"
+    },
+    {
+      "id": "a_color",
+      "question": "Are your lips, tongue, or skin blue, grey, or unusually pale?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_previous"
+    },
+    {
+      "id": "a_previous",
+      "question": "Have you had similar fevers in the past?",
+      "type": "choice",
+      "options": ["yes", "no"],
+      "always_next": "a_unwell"
+    },
+    {
+      "id": "a_unwell",
+      "question": "Do you feel extremely unwell or that something is seriously wrong?",
+      "type": "choice",
+      "options": ["yes", "no"]
+    }
+  ],
+
+  "risk_factors": [
+    "High or persistent fever",
+    "Age over 65",
+    "Pregnancy",
+    "Weakened immune system",
+    "Recent surgery, wound, or invasive procedure",
+    "Recent travel to areas with serious infectious diseases",
+    "Existing heart, lung, kidney, or liver conditions",
+    "Dehydration",
+    "Illness lasting 5+ days",
+    "Feeling very unwell or weak despite treatment",
+    "Baby under 3 months with a temperature of 38°C or higher",
+    "Baby 3–6 months with a temperature of 39°C or higher",
+    "Long-term medical conditions (heart, lung, kidney, immune problems)",
+    "Recent vaccinations",
+    "Signs of dehydration (dry mouth, sunken eyes, fewer wet nappies)",
+    "Recent contact with someone with a serious infection (meningitis, sepsis, measles)",
+    "Parents reporting the child is 'not themselves' or much less responsive"
+  ],
+
+  "red_flags": [
+    "Fever not improving or getting worse despite rest, fluids, or over-the-counter medicines",
+    "Difficulty breathing or breathing very fast",
+    "Chest pain or pressure, especially when breathing or coughing",
+    "Confusion, new disorientation, or being hard to wake",
+    "Severe stiff neck or a rash that does not fade when pressed with a glass",
+    "Blue, grey, or very pale lips or skin",
+    "Severe vomiting or signs of dehydration",
+    "Seizure or fit",
+    "Fever lasting 5 days or longer without improvement",
+    "Feeling extremely unwell or feeling that something is seriously wrong",
+    "Baby under 3 months with a temperature of 38°C or higher",
+    "Baby aged 3–6 months with a temperature of 39°C or higher",
+    "Fever in a child lasting 5 days or more",
+    "Rash in a child that does not fade when pressed with a glass",
+    "Stiff neck, dislike of light, or severe headache in a child",
+    "Child who is very drowsy, difficult to wake, or not responding normally",
+    "Child who is extremely agitated or very confused",
+    "Child breathing very fast, working hard to breathe, grunting, or chest/abdominal retractions",
+    "Cold hands and feet or unusual skin colour (blue, grey, very pale, blotchy)",
+    "Signs of dehydration in a child (few wet nappies, sunken eyes, dry mouth)",
+    "Child not eating or drinking, or much less interested in normal activities",
+    "Febrile seizure or shaking that does not stop"
+  ],
+
+  "safety_disclaimer": "This information is for general education only and does not replace a medical assessment."
+}
