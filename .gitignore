@@ -1,0 +1,17 @@
+# API keys and environment variables
+.env
+.env.*
+!.env.example
+
+# Python cache and virtual environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Sensitive prototype records
+escalation_queue.jsonl
+
+# Local files
+.DS_Store
+.ipynb_checkpoints/
